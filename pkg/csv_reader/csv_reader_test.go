@@ -3,40 +3,49 @@ package csv_reader
 import (
 	"reflect"
 	"testing"
-	"tumelo_task/recommendation"
 )
 
-var expectedSimpleData = []recommendation.Recommendation{
+var expectedSimpleData = [][]string{
 	{
-		Name: "Organisation Name",
-		MeetingDate: "Meeting Date",
-		SequenceID: "Sequence Identifier",
-		ProposalText: "Proposal Text",
-		Recommendation: "Recommendation",
+		"Organisation Name",
+		"Meeting Date",
+		"Sequence Identifier",
+		"Proposal Text",
+		"Recommendation",
 	},
 	{
-		Name: "Mckesson Corporation",
-		MeetingDate: "21/07/2023",
-		SequenceID: "1a.",
-		ProposalText: "Elect Richard H. Carmona",
-		Recommendation: "For",
+		"Mckesson Corporation",
+		"21/07/2023",
+		"1a.",
+		"Elect Richard H. Carmona",
+		"For",
 	},
 }
+
+const (
+	simpleExampleDataFilePath = "./ExampleRecommendationsSimple.csv"
+	emptyFilePath = "./EmptyFile.csv"
+)
+
 func Test_Read(t *testing.T) {
 
 	testCases := map[string]struct {
 		filepath string
-		expected []recommendation.Recommendation
+		expected [][]string
 	}{
 		"happy path": {
-			filepath: "../ExampleRecommendationsSimple.csv",
+			filepath: simpleExampleDataFilePath,
 			expected: expectedSimpleData,
+		},
+		"empty file": {
+			filepath: emptyFilePath,
+			expected: [][]string{},
 		},
 	}
 
 	for name, test := range testCases {
 		t.Run(name, func(t *testing.T) {
-			got, err := Read[recommendation.Recommendation](test.filepath)
+			got, err := Read(test.filepath)
 			if err != nil {
 				t.Errorf(err.Error())
 			}
@@ -54,17 +63,21 @@ func Test_ReadIgnoringHeader(t *testing.T) {
 
 	testCases := map[string]struct {
 		filepath string
-		expected []recommendation.Recommendation
+		expected [][]string
 	}{
 		"happy path": {
-			filepath: "../ExampleRecommendationsSimple.csv",
+			filepath: simpleExampleDataFilePath,
 			expected: expectedSimpleData[1:],
+		},
+		"empty file": {
+			filepath: emptyFilePath,
+			expected: [][]string{},
 		},
 	}
 
 	for name, test := range testCases {
 		t.Run(name, func(t *testing.T) {
-			got, err := ReadIgnoringHeader[recommendation.Recommendation](test.filepath)
+			got, err := ReadIgnoringHeader(test.filepath)
 			if err != nil {
 				t.Errorf(err.Error())
 			}

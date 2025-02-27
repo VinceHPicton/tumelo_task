@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Tumelo API
+  description: |-
+    Welcome to our abstracted API. This file provides a definition for out API, and what entities are required in order to create a vote recommendations.
+
+    There is no concrete implementation of this API as of yet, so you will be working from the spec defined in this file.
+  version: 1.0.1
+paths:
+  /organisations:
+    get:
+      tags:
+        - organisations
+      summary: List organisations that exist
+      parameters:
+        - name: api_key
+          in: header
+          description: API Key to access Tumelo API
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Organisation"
+      security:
+        - api_key: []
+
+  /generalmeetings:
+    get:
+      tags:
+        - General Meetings
+      summary: List general meetings that exist for a given organisation
+      parameters:
+        - name: api_key
+          in: header
+          description: API Key to access Tumelo API
+          schema:
+            type: string
+        - name: organisation_id
+          in: query
+          description: Filter to only return general meetings for a given Organisation
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneralMeeting"
+        "404":
+          description: Organisation not found
+      security:
+        - api_key: []
+
+  /proposals:
+    get:
+      tags:
+        - Proposals
+      summary: List general meetings that exist for a given organisation
+      parameters:
+        - name: api_key
+          in: header
+          description: API Key to access Tumelo API
+          schema:
+            type: string
+        - name: general_meeting_id
+          in: query
+          description: Filter to only show proposals at a given general meeting
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Proposal"
+        "404":
+          description: General meeting not found
+      security:
+        - api_key: []
+
+  /recommendations:
+    post:
+      tags:
+        - Vote Recommendations
+      summary: Create a Vote Recommendation
+      parameters:
+        - name: api_key
+          in: header
+          description: API Key to access Tumelo API
+          schema:
+            type: string
+      requestBody:
+        description: Create a new Vote Recommendation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoteRecommendation"
+      responses:
+        "201":
+          description: Vote recommendation created
+        "404":
+          description: Proposal not found
+        "400":
+          description: Invalid vote recommendation
+      security:
+        - api_key: []
+
+components:
+  schemas:
+    Organisation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 94454270-3a9a-4458-ac72-c6041dbf201a
+        name:
+          type: string
+          example: Apple Inc
+    GeneralMeeting:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1042e197-d0f9-4518-854a-16319a5637a7
+        organisation_id:
+          type: string
+          example: 94454270-3a9a-4458-ac72-c6041dbf201a
+        date:
+          type: string
+          format: date-string
+          example: 2023-11-15
+    Proposal:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 0604fb43-7b61-4c51-ba4e-f99cf63a4858
+        general_meeting_id:
+          type: string
+          example: 1042e197-d0f9-4518-854a-16319a5637a7
+        text:
+          type: string
+          example: Proposal 1
+        identifier:
+          type: string
+          example: Proposal 1
+    VoteRecommendation:
+      type: object
+      properties:
+        proposal_identifier:
+          type: string
+          example: 0604fb43-7b61-4c51-ba4e-f99cf63a4858
+        recommendation:
+          type: string
+          example: for
+          enum:
+            - for
+            - against
+            - abstain
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
