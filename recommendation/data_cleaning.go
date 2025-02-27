@@ -5,11 +5,10 @@ import (
 	"unicode"
 )
 
-
 func CleanAllRecommendations(recommendations *[]Recommendation) {
 	// Why are we taking a pointer here? Performance: input may be very large and there's no need to copy it for this by passing by value
-	for _, recommendation := range *recommendations {
-		recommendation.CleanData()
+	for i, _ := range *recommendations {
+		(*recommendations)[i].CleanData()
 	}
 }
 

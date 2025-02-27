@@ -9,12 +9,12 @@ import (
 
 type userOption struct {
 	optionNumber int
-	name string
+	name         string
 }
 
 const (
 	listInvalidDataAndStopOption = "1. List invalid data and stop"
-	runAFixOption = "2. Run a fix on the data and retry"
+	runAFixOption                = "2. Run a fix on the data and retry"
 )
 
 var allowedChoices = []int{1, 2}
@@ -75,8 +75,6 @@ func ListInvalidRecommendations(invalidRecommendations []recommendation.InvalidR
 		fmt.Printf("csv line: %d, reason: %s\n", invalidRec.OriginalIndex, invalidRec.Reason)
 	}
 }
-
-
 
 func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRecommendation, recommendationsPtr *[]recommendation.Recommendation) (success bool) {
 

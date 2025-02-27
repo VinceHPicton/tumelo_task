@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"tumelo_task/cli"
@@ -14,7 +15,8 @@ func main() {
 	// Kickoff CLI
 	//csvFilePath := cli.Start()
 	// csvFilePath := "./ExampleRecommendationsOriginal.csv"
-	csvFilePath := "./ExampleRecommendationsClean.csv"
+	// csvFilePath := "./ExampleRecommendationsClean.csv"
+	csvFilePath := "./OneRecommendation.csv"
 
 	// Read CSV data step
 	recommendationsData, err := csv_reader.ReadIgnoringHeader(csvFilePath)
@@ -49,5 +51,7 @@ func main() {
 	}
 
 	// At this point we should have no invalid data:
+	fmt.Println("At this point we should have no invalid data")
+	fmt.Println(recommendations)
 
 }
