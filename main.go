@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"tumelo_task/cli"
@@ -14,7 +13,8 @@ func main() {
 
 	// Kickoff CLI
 	//csvFilePath := cli.Start()
-	csvFilePath := "./ExampleRecommendations.csv"
+	// csvFilePath := "./ExampleRecommendationsOriginal.csv"
+	csvFilePath := "./ExampleRecommendationsClean.csv"
 
 	// Read CSV data step
 	recommendationsData, err := csv_reader.ReadIgnoringHeader(csvFilePath)
@@ -41,26 +41,13 @@ func main() {
 	invalidRecommendations := recommendation.FindInvalidRecommendations(&recommendations)
 
 	if len(invalidRecommendations) > 0 {
-		HandleInvalidDataScenario(invalidRecommendations, &recommendations)
-	}
-}
+		invalidDataFixed := cli.HandleInvalidDataScenario(invalidRecommendations, &recommendations)
 
-func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRecommendation, recommendationsPtr *[]recommendation.Recommendation) {
-
-	if cli.ShouldAttemptFix() {
-
-		recommendation.CleanAllRecommendations(recommendationsPtr)
-		newInvalidRecs := recommendation.FindInvalidRecommendations(recommendationsPtr)
-		if len(newInvalidRecs) > 0 {
-			fmt.Println("----Data cleaning did not remove all invalid data, listing invalid data and stopping----")
-			cli.ListInvalidRecommendations(newInvalidRecs)
+		if !invalidDataFixed {
 			os.Exit(1)
-		} else {
-			return
 		}
-
-	} else {
-		cli.ListInvalidRecommendations(invalidRecommendations)
-		os.Exit(1)
 	}
+
+	// At this point we should have no invalid data:
+
 }

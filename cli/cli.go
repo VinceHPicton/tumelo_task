@@ -75,3 +75,35 @@ func ListInvalidRecommendations(invalidRecommendations []recommendation.InvalidR
 		fmt.Printf("csv line: %d, reason: %s\n", invalidRec.OriginalIndex, invalidRec.Reason)
 	}
 }
+
+
+
+func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRecommendation, recommendationsPtr *[]recommendation.Recommendation) (success bool) {
+
+	if !ShouldAttemptFix() {
+		ListInvalidRecommendations(invalidRecommendations)
+		os.Exit(1)
+	}
+
+	successfullyFixed, newInvalidRecs := HandleFixDataAttempt(recommendationsPtr)
+
+	if !successfullyFixed {
+		fmt.Println("----Data cleaning did not remove all invalid data, listing invalid data and stopping----")
+		ListInvalidRecommendations(newInvalidRecs)
+		os.Exit(1)
+	}
+
+	return true
+}
+
+func HandleFixDataAttempt(recommendationsPtr *[]recommendation.Recommendation) (success bool, newInvalidRecommendations []recommendation.InvalidRecommendation) {
+
+	recommendation.CleanAllRecommendations(recommendationsPtr)
+	newInvalidRecs := recommendation.FindInvalidRecommendations(recommendationsPtr)
+
+	if len(newInvalidRecs) == 0 {
+		return true, newInvalidRecs
+	}
+
+	return false, newInvalidRecs
+}
