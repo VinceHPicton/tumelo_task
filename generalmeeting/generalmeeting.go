@@ -22,26 +22,34 @@ var data = map[string][]GeneralMeeting{
 	},
 }
 
+func GetGeneralMeetingForOrganisation(organisationID string) []GeneralMeeting{
+	meetings := data[organisationID]
+
+	return meetings
+}
+
+// CreateMeetingIndex indexes with: OrganisationID|MeetingDate => meeting ID
 func CreateMeetingIndex(orgNameToIDMap map[string]string) map[string]string {
-	// Index meetings
-	// TODO: Issue: if 2 meetings are on the same day, one will be lost, solution make it a []string
-	// OrgID + Date = MeetingID
+	// TODO: Issue: if 2 or more meetings are on the same day, all but one will be lost, solution: make it a []string
 	genMeetingIndex := make(map[string]string)
 	for _, orgID := range orgNameToIDMap {
+		// TODO: the much more efficient way to do this would be concurrently send all requests,
+		// then after all requests return run the loop again to aggregate all the data into the index
 		generalMeetingsForOrg := GetGeneralMeetingForOrganisation(orgID)
 		
-		for _, meeting := range generalMeetingsForOrg {
-			key := meeting.OrganisationID + "|" + meeting.Date
-			genMeetingIndex[key] = meeting.ID
-		}
+		addMeetingsToIndex(generalMeetingsForOrg, &genMeetingIndex)
 	}
 
 	return genMeetingIndex
 }
 
+func addMeetingsToIndex(meetings []GeneralMeeting, meetingIndex *map[string]string) {
+	for _, meeting := range meetings {
+		key := generateMeetingIndexKey(meeting)
+		(*meetingIndex)[key] = meeting.ID
+	}
+}
 
-func GetGeneralMeetingForOrganisation(organisationID string) []GeneralMeeting{
-	meetings := data[organisationID]
-
-	return meetings
+func generateMeetingIndexKey(meeting GeneralMeeting) string {
+	return meeting.OrganisationID + "|" + meeting.Date
 }

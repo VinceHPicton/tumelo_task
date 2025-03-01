@@ -49,7 +49,7 @@ func CreateProposalsIndex(genMeetingIndex map[string]string) map[string]string {
 	proposalsIndex := make(map[string]string)
 	for _, genMeetingId := range genMeetingIndex {
 		// TODO: the much more efficient way to do this would be concurrently send all requests,
-		// then after all requests return run the loop to aggregate all the data
+		// then after all requests return run the loop again to aggregate all the data into the index
 		proposalsForMeeting := GetProposalsForGenMeeting(genMeetingId)
 
 		addProposalsToIndex(proposalsForMeeting, &proposalsIndex)
