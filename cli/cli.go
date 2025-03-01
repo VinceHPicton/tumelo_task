@@ -76,7 +76,7 @@ func ListInvalidRecommendations(invalidRecommendations []recommendation.InvalidR
 	}
 }
 
-func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRecommendation, recommendationsPtr *[]recommendation.Recommendation) (success bool) {
+func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRecommendation, recommendationsPtr *[]recommendation.Recommendation) (success bool, newInvalidRecommendations []recommendation.InvalidRecommendation){
 
 	if !ShouldAttemptFix() {
 		ListInvalidRecommendations(invalidRecommendations)
@@ -86,12 +86,10 @@ func HandleInvalidDataScenario(invalidRecommendations []recommendation.InvalidRe
 	successfullyFixed, newInvalidRecs := HandleFixDataAttempt(recommendationsPtr)
 
 	if !successfullyFixed {
-		fmt.Println("----Data cleaning did not remove all invalid data, listing invalid data and stopping----")
-		ListInvalidRecommendations(newInvalidRecs)
-		os.Exit(1)
+		return false, newInvalidRecs
 	}
 
-	return true
+	return true, newInvalidRecs
 }
 
 func HandleFixDataAttempt(recommendationsPtr *[]recommendation.Recommendation) (success bool, newInvalidRecommendations []recommendation.InvalidRecommendation) {

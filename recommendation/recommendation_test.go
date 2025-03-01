@@ -107,36 +107,3 @@ func Test_Validate(t *testing.T) {
 		})
 	}
 }
-
-// func Test_CleanData(t *testing.T) {
-// 	// TODO: more test cases
-
-// 	testCases := map[string]struct {
-// 		given Recommendation
-// 		expected Recommendation
-// 	}{
-// 		"happy path": {
-// 			given: Recommendation{
-// 				Name: " company NamE  ",
-// 				MeetingDate: "21/07/2015",
-// 				Recommendation: "FOR",
-// 			},
-// 			expected: Recommendation{
-// 				Name: "company name",
-// 				MeetingDate: "21/07/2015",
-// 				Recommendation: "for",
-// 			},
-// 		},
-// 	}
-
-// 	for name, test := range testCases {
-// 		t.Run(name, func(t *testing.T) {
-
-// 			test.given.CleanData()
-
-// 			if false == reflect.DeepEqual(test.expected, test.given) {
-// 				t.Errorf("expect: %v, got: %v", test.expected, test.given)
-// 			}
-// 		})
-// 	}
-// }
