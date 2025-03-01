@@ -19,6 +19,11 @@ var data = map[string][]GeneralMeeting{
 			OrganisationID: "fbf713f4-d13b-4dbf-8e6c-33b494bfe519",
 			Date: "21/07/2023",
 		},
+		GeneralMeeting{
+			ID: "30cf6652-e9a5-4553-a108-84751131df69",
+			OrganisationID: "7193d18c-a18a-465c-987f-62fd4f0b30ad",
+			Date: "21/07/2023",
+		},
 	},
 }
 

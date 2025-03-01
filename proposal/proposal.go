@@ -7,6 +7,7 @@ type Proposal struct {
 	Identifier string
 }
 
+// Gen meeting ID to proposal
 var proposalsData = map[string][]Proposal{
 	"4a06d20c-c81c-430d-a1a8-c74e5ae323b0": {
 		{
@@ -34,6 +35,14 @@ var proposalsData = map[string][]Proposal{
 			GeneralMeetingID: "7ab1edb2-0176-4f2e-a2df-ffeb946a96ee",
 			Text: "Elect Susan R. Salka",
 			Identifier: "1i.",
+		},
+	},
+	"30cf6652-e9a5-4553-a108-84751131df69": {
+		{
+			ID: "United-proposal-test-ID",
+			GeneralMeetingID: "30cf6652-e9a5-4553-a108-84751131df69",
+			Text: "Elect Michael Lewis",
+			Identifier: "10",
 		},
 	},
 }

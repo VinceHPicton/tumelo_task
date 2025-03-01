@@ -8,6 +8,7 @@ import (
 	"tumelo_task/generalmeeting"
 	"tumelo_task/pkg/csv_reader"
 	"tumelo_task/pkg/get_organisations"
+	"tumelo_task/pkg/submit_results"
 	"tumelo_task/proposal"
 	"tumelo_task/recommendation"
 )
@@ -17,8 +18,8 @@ func main() {
 	// Kickoff CLI
 	// csvFilePath := cli.Start()
 	// csvFilePath := "./ExampleRecommendationsOriginal.csv"
-	// csvFilePath := "./ExampleRecommendationsClean.csv"
-	csvFilePath := "./ExampleRecommendationsSmall.csv"
+	csvFilePath := "./ExampleRecommendationsClean.csv"
+	// csvFilePath := "./ExampleRecommendationsSmall.csv"
 	// csvFilePath := "./OneRecommendation.csv"
 
 	// Read CSV data step
@@ -55,57 +56,34 @@ func main() {
 		}
 	}
 
-	fmt.Println(recommendations)
-	for _, v := range recommendations {
-		fmt.Println(v)
-	}
-
-	// At this point we should have no invalid data:
-	fmt.Println("At this point we should have no invalid data")
-
-
+	// At this point we should have no invalid CSV data
 
 	genMeetingIndex := generalmeeting.CreateMeetingIndex(orgNameToIDMap)
 
 	proposalsIndex := proposal.CreateProposalsIndex(genMeetingIndex)
 
-	// fmt.Println(genMeetingIndex)
+	matchedRecommendations := recommendation.FindMatchingRecommendations(&recommendations, genMeetingIndex, proposalsIndex)
 
-	// fmt.Println(proposalsIndex)
+	// println("genMeetingIndex:")
+	// for k , v := range genMeetingIndex {
+	// 	fmt.Println(k ,v)
+	// }
 
-	matchedRecommendations := make(map[string]recommendation.Recommendation)
-	for _, rec := range recommendations {
-		meetingKey := rec.OrganisationID + "|" + rec.MeetingDate
-		meetingID, found := genMeetingIndex[meetingKey]
-		if !found {
-			continue
-		}
-		fmt.Println("Found meetingID: ", meetingID)
+	// println("ProposalsIndex:")
+	// for k , v := range proposalsIndex {
+	// 	fmt.Println(k ,v)
+	// }
 
-		proposalKey := meetingID + "|" + rec.ProposalText + "|" + rec.SequenceID
-		fmt.Println("proposalKey: ", proposalKey)
-		proposalID, found := proposalsIndex[proposalKey]
-		if !found {
-			continue
-		}
-		fmt.Println("Found proposalID: ", proposalID)
-
-		matchedRecommendations[proposalID] = rec
+	fmt.Println("matched recommendationss:")
+	for proposalID, rec := range matchedRecommendations {
+		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}
 
-	println("genMeetingIndex:")
-	for k , v := range genMeetingIndex {
-		fmt.Println(k ,v)
-	}
+	errorList := submit_results.SubmitRecommendations(matchedRecommendations)
 
-	println("ProposalsIndex:")
-	for k , v := range proposalsIndex {
-		fmt.Println(k ,v)
-	}
-
-	fmt.Println("matched recs:")
-	for k, v := range matchedRecommendations {
-		fmt.Println(k, v)
+	fmt.Println("Process complete, any failed submissions listed below:")
+	for _, err := range errorList {
+		fmt.Println(err.Error())
 	}
 
 }
