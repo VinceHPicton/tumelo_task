@@ -16,7 +16,7 @@ The CLI will provide information on the process
 
 ## Notes on the task:
 
-- Overall it was really interesting, I definitely found it hard, it got me to learn a bunch more Go
+- Overall it was really interesting and enjoyable, I definitely found it hard too, it got me to learn a bunch more Go, I do kinda wish I had taken the opportunity to do it in Python in hindsight, I think it would've been the better tool for the job
 - Please note that there are a few comments in this project which are for you guys to help understand my thinking, under normal circumstances almost none of these would be in the code, the only ones I would leave are docstrings for functions (which are builtin Go functionality)
 - I believe commenting code in general is a poor practice and with proper naming and splitting out functions it should pretty much never be necessary
 
