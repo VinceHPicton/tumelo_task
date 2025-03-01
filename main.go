@@ -41,11 +41,14 @@ func main() {
 	}
 
 	// Add IDs to orgs step
-	recommendation.AddIDs(&recommendations, &orgNameToIDMap)
+	recommendation.AddOrganisationIDsToRecommendations(&recommendations, &orgNameToIDMap)
 
-	// Validate and give user options step
+	// Validate step
 	invalidRecommendations := recommendation.FindInvalidRecommendations(&recommendations)
 
+	// Use a CLI to give user options on how to process invalid data
+	// TODO: this CLI has been refactored a little, so it's not hideous, but would need a lot more cleaning up before production 
+	// I don't love it the way it is
 	if len(invalidRecommendations) > 0 {
 		invalidDataFixed, newInvalidRecs := cli.HandleInvalidDataScenario(invalidRecommendations, &recommendations)
 
@@ -74,7 +77,7 @@ func main() {
 	// 	fmt.Println(k ,v)
 	// }
 
-	fmt.Println("matched recommendationss:")
+	fmt.Println("matched recommendations:")
 	for proposalID, rec := range matchedRecommendations {
 		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}

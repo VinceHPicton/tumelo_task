@@ -1,8 +1,6 @@
 package recommendation
 
-import (
-	"testing"
-)
+import "testing"
 
 func Test_Validate(t *testing.T) {
 

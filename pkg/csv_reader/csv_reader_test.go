@@ -29,6 +29,10 @@ const (
 
 func Test_Read(t *testing.T) {
 
+	// TODO: a few more test cases with varying files - eg different numbers of columns
+	// This package mostly just calls encoding/csv though so no need to go mad testing a dependency.
+	// TODO: including csv files in the repo for testing isnt ideal, however when you build the application with go build
+	// These files are ignored by the compiler so it won't affect prod in any way.
 	testCases := map[string]struct {
 		filepath string
 		expected [][]string

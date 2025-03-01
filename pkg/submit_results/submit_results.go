@@ -10,6 +10,7 @@ func SubmitRecommendations(matchedRecommendations map[string]recommendation.Reco
 	var wg sync.WaitGroup
 	errChan := make(chan error, len(matchedRecommendations))
 
+	// I've used a concurrency approach here jsut to demonstrate it, it's very similar to what you'd want to do in several other places
 	for proposalID, rec := range matchedRecommendations {
 		wg.Add(1)
 		go func(proposalID string, recommendationStr string) {

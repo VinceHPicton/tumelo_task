@@ -1,6 +1,7 @@
 package recommendation
 
-// FindMatchingRecommendations returns proposalID => Recommendation (struct)
+// FindMatchingRecommendations returns map of proposalID => Recommendation by looking up correct meeting key using data on recommendation
+// And then looking up the correct proposal for that meeting
 func FindMatchingRecommendations(recommendations *[]Recommendation, genMeetingIndex map[string]string, proposalsIndex map[string]string) map[string]Recommendation {
 	matchedRecommendations := make(map[string]Recommendation)
 	for _, recommendation := range *recommendations {
@@ -10,15 +11,12 @@ func FindMatchingRecommendations(recommendations *[]Recommendation, genMeetingIn
 		if !meetingFound {
 			continue
 		}
-		// fmt.Println("Found meetingID: ", meetingID)
 
 		proposalKey := generateProposalKey(meetingID, recommendation)
-		// fmt.Println("proposalKey: ", proposalKey)
 		proposalID, proposalFound := proposalsIndex[proposalKey]
 		if !proposalFound {
 			continue
 		}
-		// fmt.Println("Found proposalID: ", proposalID)
 
 		matchedRecommendations[proposalID] = recommendation
 	}

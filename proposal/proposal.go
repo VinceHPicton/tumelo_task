@@ -8,6 +8,7 @@ type Proposal struct {
 }
 
 // Gen meeting ID to proposal
+// TODO: remove test data before production
 var proposalsData = map[string][]Proposal{
 	"4a06d20c-c81c-430d-a1a8-c74e5ae323b0": {
 		{
@@ -53,7 +54,8 @@ func GetProposalsForGenMeeting(generalMeetingID string) []Proposal {
 	return proposals
 }
 
-// CreateProposalsIndex indexes with: meetingID|proposalText|identifier => proposal ID
+// CreateProposalsIndex  gets proposals for every general meeting it's given and then indexes them
+// it indexes with: meetingID|proposalText|identifier => proposal ID
 func CreateProposalsIndex(genMeetingIndex map[string]string) map[string]string {
 	proposalsIndex := make(map[string]string)
 	for _, genMeetingId := range genMeetingIndex {

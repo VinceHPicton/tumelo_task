@@ -46,6 +46,8 @@ func ListOptionsForInvalidData() int {
 	choiceAllowed := slices.Contains(allowedChoices, choice)
 
 	if err != nil || !choiceAllowed {
+		// TODO: I did originally put a retry here - where you could try again to select your number, but 
+		// This was a little buggy and so for time reasons I just exit 
 		fmt.Println("\n---Invalid choice. Please try again.---")
 		os.Exit(1)
 	}
