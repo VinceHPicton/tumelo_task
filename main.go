@@ -7,7 +7,7 @@ import (
 	"tumelo_task/cli"
 	"tumelo_task/generalmeeting"
 	"tumelo_task/pkg/csv_reader"
-	"tumelo_task/pkg/get_organisations"
+	"tumelo_task/pkg/organisation"
 	"tumelo_task/pkg/submit_results"
 	"tumelo_task/proposal"
 	"tumelo_task/recommendation"
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Get organisations +ids step
-	orgNameToIDMap, err := get_organisations.GetOrganisations()
+	orgNameToIDMap, err := organisation.GetOrganisations()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -77,7 +77,7 @@ func main() {
 	// 	fmt.Println(k ,v)
 	// }
 
-	fmt.Println("matched recommendations:")
+	fmt.Println("Matched recommendations:")
 	for proposalID, rec := range matchedRecommendations {
 		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}

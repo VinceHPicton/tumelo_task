@@ -48,6 +48,7 @@ var proposalsData = map[string][]Proposal{
 	},
 }
 
+// TODO: this would be moved to another package and would make http calls in real api
 func GetProposalsForGenMeeting(generalMeetingID string) []Proposal {
 	proposals := proposalsData[generalMeetingID]
 

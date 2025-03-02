@@ -1,4 +1,4 @@
-package get_organisations
+package organisation
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ type Organisation struct {
 }
 
 const (
-	organisationsFilePath = "./pkg/get_organisations/organisations.json"
+	organisationsFilePath = "./pkg/organisation/organisations.json"
 )
 
 // GetOrganisations returns a map of organisation names to IDs
