@@ -57,6 +57,10 @@ func Test_convertToCapitalisedFirstLetterString(t *testing.T) {
 			given: "aNyThING",
 			expected: "Anything",
 		},
+		"empty string": {
+			given: "",
+			expected: "",
+		},
 	}
 
 	for name, test := range testCases {

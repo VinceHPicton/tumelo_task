@@ -19,8 +19,6 @@ func main() {
 	// csvFilePath := cli.Start()
 	// csvFilePath := "./ExampleRecommendationsOriginal.csv"
 	csvFilePath := "./ExampleRecommendationsClean.csv"
-	// csvFilePath := "./ExampleRecommendationsSmall.csv"
-	// csvFilePath := "./OneRecommendation.csv"
 
 	// Read CSV data step
 	recommendationsData, err := csvreader.ReadIgnoringHeader(csvFilePath)

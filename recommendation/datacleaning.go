@@ -19,7 +19,8 @@ func (r *Recommendation) CleanData() {
 	r.Recommendation = convertToCapitalisedFirstLetterString(r.Recommendation)
 }
 
-// convertToCapitalisedFirstLetterString converts any string like "aNyTHing" to "Anything"
+// convertToCapitalisedFirstLetterString converts any string with any upper/lower casing like "aNyTHing" to lowercase with the first
+// letter capitalised like: "Anything"
 func convertToCapitalisedFirstLetterString(givenString string) string {
 	if givenString == "" {
 		return givenString

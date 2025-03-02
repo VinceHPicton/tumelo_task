@@ -31,9 +31,10 @@ func FindInvalidRecommendations(recommendationsPtr *[]Recommendation) ([]Invalid
 	return invalidRecommendations
 }
 
+// Validate tests the data in the recommendation, returns nil if nothing invalid, or an error containing the fail reason if not.
 func (r *Recommendation) Validate() error {
 	if r.OrganisationID == "" {
-		return fmt.Errorf("recommendation ID not found: %v", *r)
+		return fmt.Errorf("organisation ID not found: %v", *r)
 	}
 
 	if !validateRecommendationString(r.Recommendation) {

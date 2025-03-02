@@ -12,6 +12,11 @@ From the root directory
 
 You will be asked to provide the path to the CSV file containing input recommendations data.
 
+- First use ExampleRecommendationsOriginal.csv (enter: ./ExampleRecommendationsOriginal.csv into the CLI to select it)
+  This will demonstrate how the program handles invalid data
+- Then use ExampleRecommendationsClean.csv (enter: ./ExampleRecommendationsClean.csv into the CLI to select it)
+  This will demonstrate the program actually finding and matching data correctly.
+
 The CLI will provide information on the process
 
 ## Notes on the task:
