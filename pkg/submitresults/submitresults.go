@@ -1,11 +1,7 @@
 package submitresults
 
 import (
-	"fmt"
-	"net/http"
-	"os"
 	"sync"
-	"tumelo_task/pkg/apicaller"
 	"tumelo_task/recommendation"
 )
 
@@ -49,22 +45,23 @@ func submitRecommendation(proposalID string, recommendationString string) error 
 	return nil
 
 	// this is what the real requests would look like
-	client := http.DefaultClient
+	// client := http.DefaultClient
 
-	dataStruct := RecommendationSubmission{
-		ProposalIdentifier: proposalID,
-		RecommendationString: recommendationString,
-	}
+	// dataStruct := RecommendationSubmission{
+	// 	ProposalIdentifier: proposalID,
+	// 	RecommendationString: recommendationString,
+	// }
 
-	headers := map[string]string{
-		"api_key": os.Getenv("API_KEY"),
-	}
+	// // Using Getenv requires "github.com/joho/godotenv" and calling err := godotenv.Load() at the start of the runtime.
+	// headers := map[string]string{
+	// 	"api_key": os.Getenv("API_KEY"),
+	// }
 
-	_, err := apicaller.PostRequestWithHeaders(client, os.Getenv("TUMELO_API_ADDRESS"), dataStruct, headers)
-	if err != nil {
-		return fmt.Errorf("Proposal: %v failed with error: %v", proposalID, err.Error())
-	}
+	// _, err := apicaller.PostRequestWithHeaders(client, os.Getenv("TUMELO_API_ADDRESS"), dataStruct, headers)
+	// if err != nil {
+	// 	return fmt.Errorf("Proposal: %v failed with error: %v", proposalID, err.Error())
+	// }
 
-	return nil
+	// return nil
 }
 
