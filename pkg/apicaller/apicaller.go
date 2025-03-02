@@ -1,4 +1,4 @@
-package api_caller
+package apicaller
 
 import (
 	"bytes"

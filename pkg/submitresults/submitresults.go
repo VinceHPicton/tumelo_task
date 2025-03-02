@@ -1,11 +1,11 @@
-package submit_results
+package submitresults
 
 import (
 	"fmt"
 	"net/http"
 	"os"
 	"sync"
-	"tumelo_task/pkg/api_caller"
+	"tumelo_task/pkg/apicaller"
 	"tumelo_task/recommendation"
 )
 
@@ -60,7 +60,7 @@ func submitRecommendation(proposalID string, recommendationString string) error 
 		"api_key": os.Getenv("API_KEY"),
 	}
 
-	_, err := api_caller.PostRequestWithHeaders(client, os.Getenv("TUMELO_API_ADDRESS"), dataStruct, headers)
+	_, err := apicaller.PostRequestWithHeaders(client, os.Getenv("TUMELO_API_ADDRESS"), dataStruct, headers)
 	if err != nil {
 		return fmt.Errorf("Proposal: %v failed with error: %v", proposalID, err.Error())
 	}

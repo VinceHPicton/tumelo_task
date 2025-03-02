@@ -7,8 +7,8 @@ import (
 	"tumelo_task/cli"
 	"tumelo_task/generalmeeting"
 	"tumelo_task/organisation"
-	"tumelo_task/pkg/csv_reader"
-	"tumelo_task/pkg/submit_results"
+	"tumelo_task/pkg/csvreader"
+	"tumelo_task/pkg/submitresults"
 	"tumelo_task/proposal"
 	"tumelo_task/recommendation"
 )
@@ -23,7 +23,7 @@ func main() {
 	// csvFilePath := "./OneRecommendation.csv"
 
 	// Read CSV data step
-	recommendationsData, err := csv_reader.ReadIgnoringHeader(csvFilePath)
+	recommendationsData, err := csvreader.ReadIgnoringHeader(csvFilePath)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -82,7 +82,7 @@ func main() {
 		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}
 
-	errorList := submit_results.SubmitRecommendations(matchedRecommendations)
+	errorList := submitresults.SubmitRecommendations(matchedRecommendations)
 
 	fmt.Println("Process complete, any failed submissions listed below:")
 	for _, err := range errorList {
