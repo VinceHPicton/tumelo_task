@@ -11,7 +11,7 @@ type Organisation struct {
 }
 
 const (
-	organisationsFilePath = "./pkg/organisation/organisations.json"
+	organisationsFilePath = "./organisation/organisations.json"
 )
 
 // GetOrganisations returns a map of organisation names to IDs
@@ -21,6 +21,8 @@ func GetOrganisations() (map[string]string, error) {
 	// func to do the call HTTP funcs. This way the caller of this package doesn't need to know it comes from an HTTP
 	// endpoint, the endpoint could change in future, like to a graphQL endpoint, and this way the calling code of GetOrganisations doesnt need
 	// to change.
+	
+	// organisationsFilePath := os.Getenv("organisationsFilePath")
 	bytes, err := os.ReadFile(organisationsFilePath)
 	if err != nil {
 		return map[string]string{}, err
