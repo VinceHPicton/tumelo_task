@@ -2,13 +2,6 @@ package generalmeeting
 
 import "tumelo_task/pkg/mockclient"
 
-// func GetGeneralMeetingForOrganisation(organisationID string) []GeneralMeeting{
-// 	// TODO: this should be an actual API call in the real app but for the same reason as get_organisations I've simplified to doing this
-// 	meetings := generalMeetingsData[organisationID]
-
-// 	return meetings
-// }
-
 // CreateMeetingIndex gets general meetings for every organisation it's given and then indexes them
 // with key: OrganisationID|MeetingDate => meeting ID
 func CreateMeetingIndex(orgNameToIDMap map[string]string) map[string]string {

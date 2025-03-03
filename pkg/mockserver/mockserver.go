@@ -65,9 +65,17 @@ func handleProposals(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	genMeetingID := r.URL.Query().Get("general_meeting_id")
+
+	proposalsForMeeting, ok := proposalsData[genMeetingID]
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(proposalsData)
+	json.NewEncoder(w).Encode(proposalsForMeeting)
 }
 
 func handleRecommendations(w http.ResponseWriter, r *http.Request) {
@@ -76,13 +84,5 @@ func handleRecommendations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var rec map[string]interface{}
-	err := json.NewDecoder(r.Body).Decode(&rec)
-	if err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		return
-	}
-
 	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintln(w, `{"message": "Recommendation received"}`)
 }

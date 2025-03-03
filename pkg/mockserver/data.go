@@ -2,10 +2,9 @@ package mockserver
 
 import (
 	"tumelo_task/pkg/mockclient"
-	"tumelo_task/proposal"
 )
 
-// OrgID to general meeting
+// OrgID to general meetings
 var generalMeetingsData = map[string][]mockclient.GeneralMeeting{
 	"fbf713f4-d13b-4dbf-8e6c-33b494bfe519": {
 		mockclient.GeneralMeeting{
@@ -26,7 +25,8 @@ var generalMeetingsData = map[string][]mockclient.GeneralMeeting{
 	},
 }
 
-var proposalsData = map[string][]proposal.Proposal{
+// general_meeting_id to proposals
+var proposalsData = map[string][]mockclient.Proposal{
 	"4a06d20c-c81c-430d-a1a8-c74e5ae323b0": {
 		{
 			ID: "4f7151ef-ea8b-4e0c-94d3-2e7b33a2e175",

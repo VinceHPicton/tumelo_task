@@ -8,8 +8,8 @@ import (
 type InvalidRecommendation struct {
 	Recommendation Recommendation
 	Reason string
-	// Although there is some coupling to the recommendation being from a CSV file here with OriginalIndex, if this
-	// struct was used for something else it can just be ignored
+	// Although there is some coupling to the concept of recommendation being from a CSV file here with OriginalIndex, if this
+	// struct was used for something else the field can just be ignored
 	OriginalIndex int
 }
 

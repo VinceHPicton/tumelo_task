@@ -2,6 +2,7 @@ package submitresults
 
 import (
 	"sync"
+	"tumelo_task/pkg/mockclient"
 	"tumelo_task/recommendation"
 )
 
@@ -10,12 +11,12 @@ func SubmitRecommendations(matchedRecommendations map[string]recommendation.Reco
 	var wg sync.WaitGroup
 	errChan := make(chan error, len(matchedRecommendations))
 
-	// I've used a concurrency approach here jsut to demonstrate it, it's very similar to what you'd want to do in several other places
+	// I've used a concurrency approach here just to demonstrate it, it's very similar to what you'd want to do in several other places
 	for proposalID, rec := range matchedRecommendations {
 		wg.Add(1)
 		go func(proposalID string, recommendationStr string) {
 			defer wg.Done()
-			err := submitRecommendation(proposalID, recommendationStr)
+			err := mockclient.PostRecommendation(proposalID, recommendationStr)
 			if err != nil {
 				errChan <- err
 			}
@@ -33,35 +34,5 @@ func SubmitRecommendations(matchedRecommendations map[string]recommendation.Reco
 	}
 
 	return errors
-}
-
-type RecommendationSubmission struct {
-	ProposalIdentifier string `json:"proposal_identifier"`
-	RecommendationString string `json:"recommendation"`
-}
-
-func submitRecommendation(proposalID string, recommendationString string) error {
-
-	return nil
-
-	// this is what the real requests would look like
-	// client := http.DefaultClient
-
-	// dataStruct := RecommendationSubmission{
-	// 	ProposalIdentifier: proposalID,
-	// 	RecommendationString: recommendationString,
-	// }
-
-	// // Using Getenv requires "github.com/joho/godotenv" and calling err := godotenv.Load() at the start of the runtime.
-	// headers := map[string]string{
-	// 	"api_key": os.Getenv("API_KEY"),
-	// }
-
-	// _, err := apicaller.PostRequestWithHeaders(client, os.Getenv("TUMELO_API_ADDRESS"), dataStruct, headers)
-	// if err != nil {
-	// 	return fmt.Errorf("Proposal: %v failed with error: %v", proposalID, err.Error())
-	// }
-
-	// return nil
 }
 

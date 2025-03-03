@@ -1,27 +1,37 @@
 package mockclient
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"tumelo_task/organisation"
 )
 
-// MockClient struct to encapsulate the HTTP client
 type MockClient struct {
 	httpClient *http.Client
 	baseURL    string
 }
 
-type Organisation struct {
-	ID string `json:"id"`
-	Name string `json:"name"`
-}
-
+// Why are these definitions here? I'm just doing this in a rush and Go prevents import cycles, so they cant be in their correct locations
+// This would need refactor for real
 type GeneralMeeting struct {
 	ID string
 	OrganisationID string
 	Date string
+}
+
+type Proposal struct {
+	ID string
+	GeneralMeetingID string
+	Text string
+	Identifier string
+}
+
+type RecommendationSubmission struct {
+	ProposalIdentifier string `json:"proposal_identifier"`
+	RecommendationString string `json:"recommendation"`
 }
 
 var (
@@ -31,7 +41,6 @@ var (
 	}
 )
 
-// GetOrganisations fetches organisations from the API
 func GetOrganisations() (map[string]string, error) {
 	resp, err := client.httpClient.Get(client.baseURL + "/organisations")
 	if err != nil {
@@ -48,7 +57,7 @@ func GetOrganisations() (map[string]string, error) {
 		return nil, fmt.Errorf("failed to read body: %v", err.Error())
 	}
 
-	var organisations []Organisation
+	var organisations []organisation.Organisation
 	err = json.Unmarshal(bytes, &organisations)
 	if err != nil {
 		return map[string]string{}, err
@@ -62,16 +71,15 @@ func GetOrganisations() (map[string]string, error) {
 	return orgNamesToID, nil
 }
 
-// GetGeneralMeetings fetches general meetings
 func GetGeneralMeetingForOrganisation(organisationID string) ([]GeneralMeeting, error) {
 	resp, err := client.httpClient.Get(client.baseURL + "/generalmeetings?organisation_id=" + organisationID)
 	if err != nil {
-		return nil, err
+		return []GeneralMeeting{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return []GeneralMeeting{}, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
 	var meetings []GeneralMeeting
@@ -79,51 +87,42 @@ func GetGeneralMeetingForOrganisation(organisationID string) ([]GeneralMeeting, 
 	return meetings, err
 }
 
-// PostRecommendation sends a recommendation
-// func PostRecommendation(recommendation map[string]interface{}) error {
-	// body, err := json.Marshal(recommendation)
-	// if err != nil {
-	// 	return err
-	// }
+func GetProposalsForGeneralMeeting(meetingID string) ([]Proposal, error) {
+	resp, err := client.httpClient.Get(client.baseURL + "/proposals?general_meeting_id=" + meetingID)
+	if err != nil {
+		return []Proposal{}, err
+	}
+	defer resp.Body.Close()
 
-	// resp, err := c.httpClient.Post(c.baseURL+"/recommendations", "application/json", bytes.NewReader(body))
-	// if err != nil {
-	// 	return err
-	// }
-	// defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return []Proposal{}, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
 
-	// if resp.StatusCode != http.StatusCreated {
-	// 	return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	// }
-	// return nil
-// }
+	var proposalsForMeeting []Proposal
+	err = json.NewDecoder(resp.Body).Decode(&proposalsForMeeting)
+	return proposalsForMeeting, err
+}
 
-// func main() {
-// 	// Use the local mock server
-// 	client := NewClient("http://localhost:8080")
+func PostRecommendation(proposalID string, recommendationStr string) error {
+	recommendation := RecommendationSubmission{
+		ProposalIdentifier: proposalID,
+		RecommendationString: recommendationStr,
+	}
+	
+	body, err := json.Marshal(recommendation)
+	if err != nil {
+		return err
+	}
 
-// 	// Fetch Organisations
-// 	orgs, err := client.GetOrganisations()
-// 	if err != nil {
-// 		log.Fatalf("Error fetching organisations: %v", err)
-// 	}
-// 	fmt.Println("Organisations:", orgs)
+	resp, err := client.httpClient.Post(client.baseURL + "/recommendations", "application/json", bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
-// 	// Fetch General Meetings
-// 	meetings, err := client.GetGeneralMeetings()
-// 	if err != nil {
-// 		log.Fatalf("Error fetching general meetings: %v", err)
-// 	}
-// 	fmt.Println("General Meetings:", meetings)
+	if resp.StatusCode != http.StatusCreated {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
 
-// 	// Send a Recommendation
-// 	rec := map[string]interface{}{
-// 		"proposal_id":   1001,
-// 		"recommendation": "For",
-// 	}
-// 	err = client.PostRecommendation(rec)
-// 	if err != nil {
-// 		log.Fatalf("Error sending recommendation: %v", err)
-// 	}
-// 	fmt.Println("Recommendation sent successfully!")
-// }
+	return nil
+}

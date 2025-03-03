@@ -12,6 +12,7 @@ func FindMatchingRecommendations(recommendations *[]Recommendation, genMeetingIn
 		// Here what we'd need to do is have meetingIDAtRecommendationDate be a slice of strings, not just 1 string
 		// We'd then loop that slice and for each item in it run the 2nd piece to collect that proposal
 		// The previous code where we create the indexes would also need to change of course
+		// I don't have time to change everything now to account for this problem
 		meetingIDAtRecommendationDate, meetingFound := genMeetingIndex[meetingKey]
 		if !meetingFound {
 			continue

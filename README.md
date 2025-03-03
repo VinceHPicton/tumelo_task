@@ -34,3 +34,7 @@ The CLI will provide information on the process
 ### Performance
 
 - In many places where a large slice is being passed around I've used pointers, this is because otherwise we'd be copying that large amount of data when passed by value, in places many times.
+
+### Some other bits I'd like to do
+
+- Use a .env file and pass API keys and other global data, in Go you need a dependency for this so I have left it out.

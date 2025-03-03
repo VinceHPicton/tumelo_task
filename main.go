@@ -91,4 +91,5 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
+	os.Exit(0)
 }

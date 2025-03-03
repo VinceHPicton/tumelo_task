@@ -7,16 +7,12 @@ import (
 	"tumelo_task/recommendation"
 )
 
-type userOption struct {
-	optionNumber int
-	name         string
-}
-
 const (
 	listInvalidDataAndStopOption = "1. List invalid data and stop"
 	runAFixOption                = "2. Run a fix on the data and retry"
 )
 
+// TODO: this really isn't great, multiple soruces of truth for allowed numbers etc, needs refactor if I had time
 var allowedChoices = []int{1, 2}
 
 var options = []string{
