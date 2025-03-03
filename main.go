@@ -16,13 +16,15 @@ import (
 
 func main() {
 
-	// Start mock server:
+	fmt.Println("Starting Mock HTTP server")
 	go mockserver.Start()
 
 	// Kickoff CLI
-	// csvFilePath := cli.Start()
+	csvFilePath := cli.Start()
+
+	// Uncomment these lines and comment above for easier testing of my submission (you don't have to type out the filepath)
 	// csvFilePath := "./ExampleRecommendationsOriginal.csv"
-	csvFilePath := "./ExampleRecommendationsClean.csv"
+	// csvFilePath := "./ExampleRecommendationsClean.csv"
 
 	// Read CSV data step
 	recommendationsData, err := csvreader.ReadIgnoringHeader(csvFilePath)
@@ -69,17 +71,7 @@ func main() {
 
 	matchedRecommendations := recommendation.FindMatchingRecommendations(&recommendations, genMeetingIndex, proposalsIndex)
 
-	// println("genMeetingIndex:")
-	// for k , v := range genMeetingIndex {
-	// 	fmt.Println(k ,v)
-	// }
-
-	// println("ProposalsIndex:")
-	// for k , v := range proposalsIndex {
-	// 	fmt.Println(k ,v)
-	// }
-
-	fmt.Println("Matched recommendations:")
+	fmt.Println("The following matched recommendations will be submitted:")
 	for proposalID, rec := range matchedRecommendations {
 		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}

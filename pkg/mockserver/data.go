@@ -23,6 +23,13 @@ var generalMeetingsData = map[string][]mockclient.GeneralMeeting{
 			Date: "21/07/2023",
 		},
 	},
+	"dcf44f22-bc1e-415a-b19f-b73fa18f45c6": {
+		mockclient.GeneralMeeting{
+			ID: "first-group-meeting-id1",
+			OrganisationID: "dcf44f22-bc1e-415a-b19f-b73fa18f45c6",
+			Date: "21/07/2023",
+		},
+	},
 }
 
 // general_meeting_id to proposals
@@ -61,6 +68,14 @@ var proposalsData = map[string][]mockclient.Proposal{
 			GeneralMeetingID: "30cf6652-e9a5-4553-a108-84751131df69",
 			Text: "Elect Michael Lewis",
 			Identifier: "10",
+		},
+	},
+	"first-group-meeting-id1": {
+		{
+			ID: "first-group-test-ID",
+			GeneralMeetingID: "first-group-meeting-id1",
+			Text: "Review Report into timetabling",
+			Identifier: "1",
 		},
 	},
 }

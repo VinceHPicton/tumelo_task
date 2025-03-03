@@ -2,7 +2,6 @@ package mockserver
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,7 +18,6 @@ func Start() {
 	http.HandleFunc("/recommendations", handleRecommendations)
 
 	port := ":8080"
-	fmt.Println("Mock server running on port", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
