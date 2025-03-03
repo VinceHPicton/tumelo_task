@@ -6,14 +6,18 @@ import (
 	"os"
 	"tumelo_task/cli"
 	"tumelo_task/generalmeeting"
-	"tumelo_task/organisation"
 	"tumelo_task/pkg/csvreader"
+	"tumelo_task/pkg/mockclient"
+	"tumelo_task/pkg/mockserver"
 	"tumelo_task/pkg/submitresults"
 	"tumelo_task/proposal"
 	"tumelo_task/recommendation"
 )
 
 func main() {
+
+	// Start mock server:
+	go mockserver.Start()
 
 	// Kickoff CLI
 	// csvFilePath := cli.Start()
@@ -33,7 +37,7 @@ func main() {
 	}
 
 	// Get organisations +ids step
-	orgNameToIDMap, err := organisation.GetOrganisations()
+	orgNameToIDMap, err := mockclient.GetOrganisations()
 	if err != nil {
 		log.Fatal(err.Error())
 	}

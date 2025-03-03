@@ -1,0 +1,88 @@
+package mockserver
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+)
+
+const (
+	organisationsFilePath = "./pkg/mockserver/organisations.json"
+)
+
+func Start() {
+	http.HandleFunc("/organisations", handleOrganisations)
+	http.HandleFunc("/generalmeetings", handleGeneralMeetings)
+	http.HandleFunc("/proposals", handleProposals)
+	http.HandleFunc("/recommendations", handleRecommendations)
+
+	port := ":8080"
+	fmt.Println("Mock server running on port", port)
+	log.Fatal(http.ListenAndServe(port, nil))
+}
+
+func handleOrganisations(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	data, err := os.ReadFile(organisationsFilePath)
+	if err != nil {
+		http.Error(w, "Failed to read organisations data", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func handleGeneralMeetings(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	orgID := r.URL.Query().Get("organisation_id")
+
+	meetingsForOrg, ok := generalMeetingsData[orgID]
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(meetingsForOrg)
+}
+
+func handleProposals(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(proposalsData)
+}
+
+func handleRecommendations(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var rec map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&rec)
+	if err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintln(w, `{"message": "Recommendation received"}`)
+}

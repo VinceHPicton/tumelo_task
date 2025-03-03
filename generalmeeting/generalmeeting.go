@@ -1,38 +1,13 @@
 package generalmeeting
 
-type GeneralMeeting struct {
-	ID string
-	OrganisationID string
-	Date string
-}
+import "tumelo_task/pkg/mockclient"
 
-// OrgID to general meeting
-var data = map[string][]GeneralMeeting{
-	"fbf713f4-d13b-4dbf-8e6c-33b494bfe519": {
-		GeneralMeeting{
-			ID: "4a06d20c-c81c-430d-a1a8-c74e5ae323b0",
-			OrganisationID: "fbf713f4-d13b-4dbf-8e6c-33b494bfe519",
-			Date: "21/07/2023",
-		},
-		GeneralMeeting{
-			ID: "7ab1edb2-0176-4f2e-a2df-ffeb946a96ee",
-			OrganisationID: "fbf713f4-d13b-4dbf-8e6c-33b494bfe519",
-			Date: "21/07/2023",
-		},
-		GeneralMeeting{
-			ID: "30cf6652-e9a5-4553-a108-84751131df69",
-			OrganisationID: "7193d18c-a18a-465c-987f-62fd4f0b30ad",
-			Date: "21/07/2023",
-		},
-	},
-}
+// func GetGeneralMeetingForOrganisation(organisationID string) []GeneralMeeting{
+// 	// TODO: this should be an actual API call in the real app but for the same reason as get_organisations I've simplified to doing this
+// 	meetings := generalMeetingsData[organisationID]
 
-func GetGeneralMeetingForOrganisation(organisationID string) []GeneralMeeting{
-	// TODO: this should be an actual API call in the real app but for the same reason as get_organisations I've simplified to doing this
-	meetings := data[organisationID]
-
-	return meetings
-}
+// 	return meetings
+// }
 
 // CreateMeetingIndex gets general meetings for every organisation it's given and then indexes them
 // with key: OrganisationID|MeetingDate => meeting ID
@@ -43,7 +18,10 @@ func CreateMeetingIndex(orgNameToIDMap map[string]string) map[string]string {
 	for _, orgID := range orgNameToIDMap {
 		// TODO: the much more efficient way to do this would be concurrently send all requests,
 		// then after all requests return run the loop again to aggregate all the data into the index
-		generalMeetingsForOrg := GetGeneralMeetingForOrganisation(orgID)
+		generalMeetingsForOrg, _ := mockclient.GetGeneralMeetingForOrganisation(orgID)
+
+		//TODO: we should be collecting these errors and possibly logging them, not time right now
+		// It getting an err for  one of these calls will usually mean there were just no meetings for that org, not a failure
 		
 		addMeetingsToIndex(generalMeetingsForOrg, &genMeetingIndex)
 	}
@@ -51,13 +29,13 @@ func CreateMeetingIndex(orgNameToIDMap map[string]string) map[string]string {
 	return genMeetingIndex
 }
 
-func addMeetingsToIndex(meetings []GeneralMeeting, meetingIndex *map[string]string) {
+func addMeetingsToIndex(meetings []mockclient.GeneralMeeting, meetingIndex *map[string]string) {
 	for _, meeting := range meetings {
 		key := generateMeetingIndexKey(meeting)
 		(*meetingIndex)[key] = meeting.ID
 	}
 }
 
-func generateMeetingIndexKey(meeting GeneralMeeting) string {
+func generateMeetingIndexKey(meeting mockclient.GeneralMeeting) string {
 	return meeting.OrganisationID + "|" + meeting.Date
 }
