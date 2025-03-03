@@ -71,14 +71,14 @@ func main() {
 
 	matchedRecommendations := recommendation.FindMatchingRecommendations(&recommendations, genMeetingIndex, proposalsIndex)
 
-	fmt.Println("The following matched recommendations will be submitted:")
+	fmt.Println("\n---- The following matched recommendations will be submitted ----")
 	for proposalID, rec := range matchedRecommendations {
 		fmt.Println("ProposalID: ", proposalID, "Recommendation: ", rec.Recommendation)
 	}
 
 	errorList := submitresults.SubmitRecommendations(matchedRecommendations)
 
-	fmt.Println("Process complete, any failed submissions listed below:")
+	fmt.Println("\n---- Process complete, any failed submissions listed below ----")
 	for _, err := range errorList {
 		fmt.Println(err.Error())
 	}
